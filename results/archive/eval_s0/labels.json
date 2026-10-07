@@ -1,0 +1,10 @@
+{
+  "sac_blind": "SAC, blind",
+  "sac_calibrator": "SAC + calibrator",
+  "sac_calibrator_no_trigger": "SAC + calibrator, no trigger",
+  "sac_history": "SAC + history",
+  "sac_true_parameters": "SAC + true parameters",
+  "pid": "PID",
+  "pid_calibrator": "PID + calibrator",
+  "pid_calibrator_no_trigger": "PID + calibrator, no trigger"
+}

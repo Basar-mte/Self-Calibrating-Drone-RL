@@ -1,0 +1,134 @@
+seed: 1
+device: auto
+drone:
+  mass: 1.0
+  arm_length: 0.17
+  inertia:
+  - 0.0082
+  - 0.0082
+  - 0.0149
+  max_motor_thrust: 8.0
+  yaw_torque_coeff: 0.016
+  motor_time_constant: 0.03
+  linear_drag: 0.25
+  rate_gains:
+  - 20.0
+  - 20.0
+  - 10.0
+  max_body_rate:
+  - 5.0
+  - 5.0
+  - 2.0
+  max_thrust_ratio: 2.5
+sim:
+  dt: 0.02
+  substeps: 4
+  episode_seconds: 10.0
+sensors:
+  pos_noise: 0.01
+  vel_noise: 0.02
+  att_noise: 0.005
+  gyro_noise: 0.003
+  accel_noise: 0.15
+task:
+  arena:
+  - - -2.5
+    - 2.5
+  - - -2.5
+    - 2.5
+  - - 1.0
+    - 3.0
+  max_start_distance: 3.0
+  max_start_tilt: 0.3
+  max_start_speed: 0.5
+  max_start_rate: 0.5
+  lost_distance: 6.0
+reward:
+  alive: 1.0
+  precision: 1.0
+  precision_scale: 0.3
+  distance: 0.2
+  distance_cap: 4.0
+  velocity: 0.05
+  body_rate: 0.05
+  action_change: 0.05
+  yaw: 0.1
+  crash: -10.0
+uncertainty:
+  enabled: true
+  mass_range:
+  - 0.85
+  - 1.15
+  battery_range:
+  - 0.92
+  - 1.0
+  wind_speed_range:
+  - 0.0
+  - 3.0
+  gust_std_range:
+  - 0.0
+  - 0.6
+  event_prob: 0.8
+  event_time_range:
+  - 1.5
+  - 8.0
+  component_prob: 0.5
+  payload_factor_range:
+  - 0.8
+  - 1.45
+  mass_limits:
+  - 0.7
+  - 1.5
+  motor_efficiency_range:
+  - 0.6
+  - 0.95
+  event_wind_speed_range:
+  - 0.0
+  - 6.0
+  event_gust_std_range:
+  - 0.0
+  - 0.8
+  battery_sag_range:
+  - 0.88
+  - 1.0
+calibrator:
+  trigger: true
+  thrust_gain_prior_std: 0.3
+  disturbance_prior_std:
+  - 3.0
+  - 3.0
+  - 0.5
+  torque_prior_std: 0.15
+  thrust_gain_drift: 0.001
+  disturbance_drift:
+  - 0.02
+  - 0.02
+  - 0.002
+  torque_drift: 0.0005
+  accel_meas_std: 0.3
+  torque_meas_std: 0.006
+  cusum_slack: 3.0
+  cusum_threshold: 30.0
+observation:
+  mode: base
+  history: 10
+sac:
+  hidden:
+  - 256
+  - 256
+  gamma: 0.99
+  tau: 0.005
+  lr: 0.0003
+  batch_size: 256
+  buffer_size: 1000000
+  init_alpha: 0.2
+  target_entropy: auto
+  cuda_graph: auto
+train:
+  total_steps: 1500000
+  num_envs: 16
+  start_steps: 20000
+  learning_starts: 10000
+  updates_per_step: 4
+  eval_every: 50000
+  eval_episodes: 48

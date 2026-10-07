@@ -1,0 +1,32 @@
+{
+  "slow, no detector": {
+    "flights": 100,
+    "thrust_gain_converge_s_median": Infinity,
+    "fault_torque_converge_s_median": 1.06,
+    "both_converge_s_median": Infinity,
+    "both_converge_s_p90": NaN,
+    "never_converged": 1.0,
+    "thrust_gain_noise_pct": 1.1727369654184552,
+    "false_alarms_per_min": 0.0
+  },
+  "fast forgetting, no detector": {
+    "flights": 100,
+    "thrust_gain_converge_s_median": 7.96,
+    "fault_torque_converge_s_median": 0.05,
+    "both_converge_s_median": 7.96,
+    "both_converge_s_p90": NaN,
+    "never_converged": 0.43,
+    "thrust_gain_noise_pct": 0.9016484735409938,
+    "false_alarms_per_min": 0.0
+  },
+  "slow + change detector (default)": {
+    "flights": 100,
+    "thrust_gain_converge_s_median": 0.14,
+    "fault_torque_converge_s_median": 0.66,
+    "both_converge_s_median": 0.68,
+    "both_converge_s_p90": 0.76,
+    "never_converged": 0.0,
+    "thrust_gain_noise_pct": 1.1727369654184552,
+    "false_alarms_per_min": 0.0
+  }
+}

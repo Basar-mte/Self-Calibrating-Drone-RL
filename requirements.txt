@@ -1,0 +1,8 @@
+# Install everything with:   pip install -r requirements.txt
+# Python 3.10 to 3.13 (PyTorch has no package for newer versions yet). A GPU is not needed.
+numpy>=1.24
+torch>=2.0
+matplotlib>=3.7
+pyyaml>=6.0
+pandas>=2.0
+imageio>=2.30

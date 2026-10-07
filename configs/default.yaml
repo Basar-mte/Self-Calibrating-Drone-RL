@@ -1,0 +1,104 @@
+# Self-calibrating drone: the default recipe.
+# Every key is explained in docs/05_config_reference.md.
+# Any key can be overridden from the command line, e.g.
+#   python train.py --set observation.mode=base train.total_steps=200000
+
+seed: 0
+device: auto            # auto | cpu | cuda
+
+drone:                  # a 1 kg quadrotor in the X configuration
+  mass: 1.0             # kg, nominal (the value the controllers are designed for)
+  arm_length: 0.17      # m, centre of the frame to each motor
+  inertia: [0.0082, 0.0082, 0.0149]   # kg m^2 about body x, y, z
+  max_motor_thrust: 8.0 # N per motor (thrust-to-weight about 3.3 at nominal mass)
+  yaw_torque_coeff: 0.016   # m: reaction torque per newton of thrust
+  motor_time_constant: 0.03 # s, first-order motor lag
+  linear_drag: 0.25     # N per (m/s) of airspeed
+  rate_gains: [20.0, 20.0, 10.0]  # 1/s, the inner body-rate loop (proportional only)
+  max_body_rate: [5.0, 5.0, 2.0]  # rad/s commanded at |action| = 1
+  max_thrust_ratio: 2.5 # collective thrust at action = +1, as a multiple of nominal hover thrust
+
+sim:
+  dt: 0.02              # s, control period (50 Hz)
+  substeps: 4           # physics steps per control step (200 Hz)
+  episode_seconds: 10.0 # training episode length
+
+sensors:                # standard deviations of the measurement noise
+  pos_noise: 0.01       # m
+  vel_noise: 0.02       # m/s
+  att_noise: 0.005      # rad
+  gyro_noise: 0.003     # rad/s
+  accel_noise: 0.15     # m/s^2
+
+task:
+  arena: [[-2.5, 2.5], [-2.5, 2.5], [1.0, 3.0]]   # box for starts and goals, m
+  max_start_distance: 3.0  # m from the goal (training)
+  max_start_tilt: 0.3   # rad
+  max_start_speed: 0.5  # m/s
+  max_start_rate: 0.5   # rad/s
+  lost_distance: 6.0    # m from the goal: the episode ends as a failure
+
+reward:
+  alive: 1.0            # per step while flying
+  precision: 1.0        # bonus * exp(-distance / precision_scale)
+  precision_scale: 0.3  # m
+  distance: 0.2         # per metre of distance to the goal
+  distance_cap: 4.0     # m
+  velocity: 0.05        # per m/s of speed
+  body_rate: 0.05       # per rad/s of body rate
+  action_change: 0.05   # per unit of squared change in the action
+  yaw: 0.1              # per rad of yaw error
+  crash: -10.0          # once, on a crash, flip or loss
+
+uncertainty:            # the training distribution (domain randomisation)
+  enabled: true         # false: always the nominal drone in still air
+  mass_range: [0.85, 1.15]        # kg at the start of an episode
+  battery_range: [0.92, 1.0]      # thrust efficiency of all motors
+  wind_speed_range: [0.0, 3.0]    # m/s, horizontal, random direction
+  gust_std_range: [0.0, 0.6]      # m/s
+  event_prob: 0.8                 # chance that uncertainty arrives mid-episode
+  event_time_range: [1.5, 8.0]    # s
+  component_prob: 0.5             # each kind of change is included with this chance
+  payload_factor_range: [0.8, 1.45]   # mass multiplied by this
+  mass_limits: [0.7, 1.5]         # kg
+  motor_efficiency_range: [0.6, 0.95] # one random motor drops to this
+  event_wind_speed_range: [0.0, 6.0]  # m/s
+  event_gust_std_range: [0.0, 0.8]    # m/s
+  battery_sag_range: [0.88, 1.0]  # all motors multiplied by this
+
+calibrator:             # online estimator of thrust gain, disturbance force and fault torque
+  trigger: true         # change detector: reset confidence when the model stops fitting
+  thrust_gain_prior_std: 0.3      # 1/kg
+  disturbance_prior_std: [3.0, 3.0, 0.5]   # m/s^2 (vertical kept small: see docs/01)
+  torque_prior_std: 0.15          # N m
+  thrust_gain_drift: 0.001        # random-walk std per step
+  disturbance_drift: [0.02, 0.02, 0.002]
+  torque_drift: 0.0005
+  accel_meas_std: 0.3             # m/s^2, sensor noise plus model mismatch
+  torque_meas_std: 0.006          # N m
+  cusum_slack: 3.0                # CUSUM drift allowance on the normalised innovation
+  cusum_threshold: 30.0           # CUSUM alarm level
+
+observation:
+  mode: calib           # base | calib | oracle | history
+  history: 10           # frames, for mode = history
+
+sac:
+  hidden: [256, 256]
+  gamma: 0.99
+  tau: 0.005
+  lr: 0.0003
+  batch_size: 256
+  buffer_size: 1000000
+  init_alpha: 0.2
+  target_entropy: auto  # auto = -action_dim
+  cuda_graph: auto      # auto = on when training on a GPU (same maths, about 10x faster)
+
+train:
+  total_steps: 1500000  # environment steps, summed over parallel drones
+  num_envs: 16
+  start_steps: 20000    # uniformly random actions before the policy takes over
+  learning_starts: 10000
+  updates_per_step: 4   # gradient steps per vector step (one vector step = num_envs env steps)
+  eval_every: 50000
+  eval_episodes: 48

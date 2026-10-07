@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.vscode/
+.ipynb_checkpoints/
+results/**/last.pt
+results/**/replay*.npz
+results/smoke*/
+results/**/*.log
