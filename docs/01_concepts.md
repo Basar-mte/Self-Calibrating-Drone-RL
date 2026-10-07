@@ -68,7 +68,7 @@ Three kinds of things can be wrong, and the controller is never told about them:
 
 Each test scenario changes one or more of these at **t = 5 s**, while the drone is
 hovering at its goal. That moment is "uncertainty arriving". Training uses random versions
-of the same changes, at random times (see [05_config_reference.md](05_config_reference.md)).
+of the same changes, at random times (see [04_config_reference.md](04_config_reference.md)).
 
 ## 1.4 Why a fixed controller struggles
 
@@ -220,4 +220,4 @@ And two classical controllers, flown on exactly the same drones:
 | **PID + calibrator** | the same, using the calibrator's estimates as feed-forward |
 
 The results, and what they do and do not show, are in the [README](../README.md#results)
-and [04_results_guide.md](04_results_guide.md).
+and on the [results figures](../results/figures/).

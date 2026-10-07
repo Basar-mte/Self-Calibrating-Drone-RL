@@ -1,8 +1,17 @@
+# Python
 __pycache__/
 *.pyc
-.vscode/
 .ipynb_checkpoints/
+
+# Editors
+.vscode/
+
+# Large or regenerable training and evaluation outputs
 results/**/last.pt
 results/**/replay*.npz
-results/smoke*/
 results/**/*.log
+results/*.log
+results/smoke*/
+results/archive/
+results/demo/
+results/eval/traces/

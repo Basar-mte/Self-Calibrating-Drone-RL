@@ -2,7 +2,7 @@
 
 What each file does, in the order worth reading them. Line counts are approximate.
 
-Previous: [02_setup.md](02_setup.md). Next: [04_results_guide.md](04_results_guide.md).
+Previous: [02_setup.md](02_setup.md). Next: [04_config_reference.md](04_config_reference.md).
 
 ---
 
@@ -209,7 +209,7 @@ every test scenario given time, so the plain PID is slow but not crippled.
 
 `run_episodes` flies a full episode on every drone and records whatever the figures
 need. `episode_metrics` computes the metrics defined in its docstring and in
-[04_results_guide.md](04_results_guide.md). `evaluate.py` uses scenario seed
+the [README](../README.md#results). `evaluate.py` uses scenario seed
 `50,000 + index`, so every controller meets the same drones.
 
 `calibration_study.py` separates the estimator from the controller. It records what the

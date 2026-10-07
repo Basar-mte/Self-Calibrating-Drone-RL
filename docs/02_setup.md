@@ -16,8 +16,8 @@ Previous: [01_concepts.md](01_concepts.md). Next: [03_code_walkthrough.md](03_co
 ## 2.2 Install
 
 ```bash
-git clone <repository URL>
-cd <the folder that was created>
+git clone https://github.com/Basar-mte/Self-Calibrating-Drone.git
+cd Self-Calibrating-Drone
 pip install -r requirements.txt
 ```
 

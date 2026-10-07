@@ -1,5 +1,5 @@
 # Self-calibrating drone: the default recipe.
-# Every key is explained in docs/05_config_reference.md.
+# Every key is explained in docs/04_config_reference.md.
 # Any key can be overridden from the command line, e.g.
 #   python train.py --set observation.mode=base train.total_steps=200000
 
